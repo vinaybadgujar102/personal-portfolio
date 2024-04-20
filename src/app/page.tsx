@@ -3,7 +3,7 @@ import LandingContainer from "./components/LandingContainer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[]">
+    <main className="flex min-h-screen items-center justify-between bg-[]">
       <LandingContainer />
     </main>
   );
