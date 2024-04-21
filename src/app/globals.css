@@ -7,5 +7,5 @@ body {
 }
 
 .container {
-  @apply mx-auto xl:px-20 xl:py-20 md:px-10 md:py-10 sm:px-2 sm:py-2 px-4 py-4 rounded-lg;
+  @apply bg-white mx-auto xl:px-20 xl:py-20 md:px-10 md:py-10 sm:px-2 sm:py-2 px-4 py-4 rounded-lg;
 }
