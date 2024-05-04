@@ -15,17 +15,13 @@ const LandingContainer = () => {
             </span>
           </div>
           <p className="text-md font-semibold mb-8 leading-7">
-            Hey there! I'm a Full Stack Developer who loves to build cool web
-            apps. Check out my work and let's create something awesome together!
+            Hey there! I'm a Full Stack Developer who loves to build cool web apps. Check out my work and let's create
+            something awesome together!
           </p>
         </div>
-        <Image
-          src=""
-          alt=""
-          className="w-[150px] h-[150px] rounded-full bg-slate-500 mb-8"
-        />
+        <Image src="" alt="" className="w-[150px] h-[150px] rounded-full bg-slate-500 mb-8" />
       </div>
-      <div >
+      <div>
         <BottomNav />
       </div>
     </div>

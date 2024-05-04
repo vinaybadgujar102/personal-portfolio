@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#EBF4F5] ;
+  @apply bg-[#EBF4F5];
 }
 
 .container {
