@@ -1,12 +1,16 @@
+"use client";
 import React from "react";
 import Button from "./common/Button";
+import Link from "next/link";
+import { NAVOPTIONS } from "../constants/NavOptions";
 
 const BottomNav = () => {
-  const navOptions = ["Home", "About", "Work", "Contact"];
   return (
     <div className="flex flex-row justify-between mx-4">
-      {navOptions.map((label) => (
-        <Button key={label}>{label}</Button>
+      {NAVOPTIONS.map((nav) => (
+        <Button key={nav.label}>
+          <Link href={nav.url}>{nav.label}</Link>
+        </Button>
       ))}
     </div>
   );
