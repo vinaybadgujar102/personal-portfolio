@@ -14,7 +14,7 @@ interface ProjectCardProps {
 const ProjectCard = ({ title, description, image, codeUrl, liveUrl }: ProjectCardProps) => {
   return (
     <div className="flex flex-col max-w-sm bg-white border border-gray-200 rounded-lg shadow h-full">
-      <Image width={500} height={200} className="rounded-t-lg object-cover" src={image} alt={title} />
+      <Image width={500} height={200} className="rounded-t-lg object-cover h-[200px]" src={image} alt={title} />
       <div className="p-5 flex flex-col flex-grow">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{title}</h5>
         <p className="mb-3 font-normal text-gray-700 flex-grow" style={{ maxHeight: "6rem", overflow: "auto" }}>

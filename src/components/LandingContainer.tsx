@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import BottomNav from "./BottomNav";
+import { PERSONALDETAILS } from "@/constants/PersonalDetails";
 
 const LandingContainer = () => {
   return (
@@ -15,11 +16,17 @@ const LandingContainer = () => {
             </span>
           </div>
           <p className="text-md font-semibold mb-8 leading-7">
-            Hey there! I'm a Full Stack Developer who loves to build cool web apps. Check out my work and let's create
-            something awesome together!
+            Hey there! I&apos;m a Full Stack Developer who loves to build cool web apps. Check out my work and
+            let&apos;s create something awesome together!
           </p>
         </div>
-        <Image src="" alt="" className="w-[150px] h-[150px] rounded-full bg-slate-500 mb-8" />
+        <Image
+          src={PERSONALDETAILS.photo}
+          alt={`Photo of the author ${PERSONALDETAILS.name}`}
+          width={150}
+          height={150}
+          className="w-[150px] h-[150px] rounded-full bg-slate-500 mb-8"
+        />
       </div>
       <div>
         <BottomNav />

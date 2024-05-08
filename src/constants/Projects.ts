@@ -11,7 +11,7 @@ export const PROJECTS: Project[] = [
     title: "Duo Dev",
     description: " A pair-programmer finder.",
     image:
-      "https://images.unsplash.com/photo-1714745455353-f47a2e2b5647?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     liveUrl: "https://duo-dev-production.up.railway.app/",
     codeUrl: "https://github.com/vinaybadgujar102/duo-dev",
   },
@@ -19,7 +19,7 @@ export const PROJECTS: Project[] = [
     title: "Netflix Clone",
     description: "Netflix experience recreated with React.",
     image:
-      "https://images.unsplash.com/photo-1714745455353-f47a2e2b5647?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1512070800540-0d4192faa057?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     codeUrl: "https://github.com/vinaybadgujar102/netflix-clone",
     liveUrl: "https://netflix-clone-nine-flame.vercel.app/",
   },
