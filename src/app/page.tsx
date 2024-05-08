@@ -1,5 +1,4 @@
-import Image from "next/image";
-import LandingContainer from "./components/LandingContainer";
+import LandingContainer from "@/components/LandingContainer";
 
 export default function Home() {
   return (
