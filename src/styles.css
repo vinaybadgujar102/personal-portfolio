@@ -1,0 +1,274 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --fg: #1a1a1a;
+  --fg-muted: #525252;
+  --fg-faint: #737373;
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --border: #e5e5e5;
+  --accent: #3d6b5c;
+  --accent-hover: #2d5246;
+  --hr: #e5e5e5;
+  --code-bg: #f0f0f0;
+}
+
+:root.dark,
+:root[data-theme="dark"] {
+  --fg: #ededed;
+  --fg-muted: #a3a3a3;
+  --fg-faint: #737373;
+  --bg: #0a0a0a;
+  --bg-elevated: #141414;
+  --border: #262626;
+  --accent: #7eb8a4;
+  --accent-hover: #9ecebe;
+  --hr: #262626;
+  --code-bg: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not([data-theme="light"]) {
+    --fg: #ededed;
+    --fg-muted: #a3a3a3;
+    --fg-faint: #737373;
+    --bg: #0a0a0a;
+    --bg-elevated: #141414;
+    --border: #262626;
+    --accent: #7eb8a4;
+    --accent-hover: #9ecebe;
+    --hr: #262626;
+    --code-bg: #1a1a1a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+code {
+  font-size: 0.875em;
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.page-wrap {
+  width: min(42rem, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.page-wide {
+  width: min(52rem, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--fg);
+  margin: 0 0 1.5rem;
+}
+
+.page-lead {
+  color: var(--fg-muted);
+  margin: 0 0 1.5rem;
+  line-height: 1.75;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--hr);
+  margin: 2.5rem 0;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--bg) 92%, transparent);
+}
+
+.site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+  padding: 1rem 0;
+}
+
+.site-brand {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--fg);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.site-brand:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+  margin-left: auto;
+  font-size: 0.9375rem;
+}
+
+.nav-link {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.nav-link.is-active {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.theme-btn {
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--fg-faint);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.theme-btn:hover {
+  color: var(--fg);
+  border-color: var(--fg-muted);
+}
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--fg-faint);
+}
+
+.dev-log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dev-log-list li {
+  margin: 0;
+  padding: 0.35rem 0;
+}
+
+.dev-log-list a {
+  color: var(--fg);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.dev-log-list a:hover {
+  color: var(--accent);
+}
+
+.dev-log-group {
+  margin-bottom: 2rem;
+}
+
+.dev-log-group h2 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+  margin: 0 0 0.75rem;
+}
+
+.note-toc {
+  font-size: 0.8125rem;
+  color: var(--fg-faint);
+}
+
+.note-toc ul {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+
+.note-toc li {
+  margin: 0.25rem 0;
+}
+
+.note-toc a {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.note-toc a:hover {
+  color: var(--accent);
+}
+
+.note-meta {
+  font-size: 0.8125rem;
+  color: var(--fg-faint);
+  margin-bottom: 1.5rem;
+}
+
+.prose-note .prose {
+  --tw-prose-body: var(--fg-muted);
+  --tw-prose-headings: var(--fg);
+  --tw-prose-links: var(--accent);
+  --tw-prose-bold: var(--fg);
+  --tw-prose-code: var(--fg);
+}
+
+.prose-note .prose a:hover {
+  color: var(--accent-hover);
+}

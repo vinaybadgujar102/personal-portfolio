@@ -1,0 +1,20 @@
+{
+  "notes": [
+    {
+      "slug": "perps-25-may-2026",
+      "title": "25 May 2026",
+      "group": "Perps",
+      "section": "dev-logs",
+      "vaultPath": "Perps/25 May 2026.md",
+      "markdown": "### 25 May\n\n- 1.55 pm - Adding price poller service. Earlier we used to directly connect to binance server to fetch index prices in the trade engine only. But this approach fails cause - 1. Trade engine needs to be very fast, so increases workload may hit performance. 2. We need the historical index price for replaying events. Our current arch looks like following\n![](/assets/Perps--25_May_2026--Pasted_image_20260525165138.png)\n\n- 2.48 pm  - Completed migration of price poller to standalone service https://x.com/badgujarvinay09/status/2058843978741723555 . Now moving to add market orders. Thinking about slippage should it be passed with order or stored as user configuration in trade engine only. For first iteration of implementing market order lets just dont care about slippage. We will add it in second pass. \n- 3.30 pm - Implementing the logic for market orders for pretty easy than i initially thought may cause the complex things was already handled in limit order. Here i just had to return after the matching engine call was finished. So now next big thing is to add leveraged positions. This things is taking my head than anything. Still not yet full understood should i pass it with post order endpoint or not cause as i saw on binance docs their post endpoint doesnt have leverage in request body. So will again try to get around this concept and add the leverage bit by bit.",
+      "toc": [
+        {
+          "id": "25-may",
+          "label": "25 May"
+        }
+      ],
+      "updatedAt": "2026-05-25T11:35:15.136Z",
+      "featured": false
+    }
+  ]
+}
