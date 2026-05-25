@@ -1,0 +1,13 @@
+node_modules
+.DS_Store
+dist
+.output
+.vinxi
+content/synced
+content/.github-sync-state.json
+.cache
+*.local
+
+# Keep generated manifest and assets for CI deploy
+!src/generated/dev-logs-manifest.json
+!public/assets/
