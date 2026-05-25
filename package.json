@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "npm run content && vite dev --port 3000",
-    "build": "npm run content; vite build",
+    "build": "npm run content && vite build",
     "content": "tsx scripts/sync-github.ts && tsx scripts/build-content.ts",
     "content:vault": "tsx scripts/sync-vault.ts && tsx scripts/build-content.ts",
     "content:force": "tsx scripts/sync-github.ts --force && tsx scripts/build-content.ts",

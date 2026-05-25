@@ -3,17 +3,14 @@ import {
   copyFileSync,
   existsSync,
   mkdirSync,
+  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
 } from 'node:fs'
-import { dirname, relative, resolve, basename } from 'node:path'
+import { dirname, relative, resolve } from 'node:path'
 import fg from 'fast-glob'
-import {
-  githubRepoSlug,
-  githubRepoUrl,
-  loadContentSources,
-} from './lib/paths.ts'
+import { githubRepoSlug, loadContentSources } from './lib/paths.ts'
 
 const ROOT = resolve(import.meta.dirname, '..')
 const sources = loadContentSources(ROOT)
@@ -26,13 +23,15 @@ if (!github) {
 
 const syncedDir = resolve(ROOT, 'content/synced')
 const assetsDir = resolve(ROOT, 'public/assets')
-const cacheDir = resolve(ROOT, '.cache/dev_logs')
+const archiveDir = resolve(ROOT, '.cache/dev_logs-archive')
 const statePath = resolve(ROOT, 'content/.github-sync-state.json')
-const repoUrl = githubRepoUrl(sources)
+const manifestPath = resolve(ROOT, 'src/generated/dev-logs-manifest.json')
 const repoSlug = githubRepoSlug(sources)
-const branch = github.branch
+const { owner, repo, branch } = github
 
 const embedRegex = /!\[\[([^\]]+)\]\]/g
+const GITHUB_API = 'https://api.github.com'
+const USER_AGENT = 'personal-portfolio-content-sync'
 
 type SyncState = { sha: string; syncedAt: string }
 
@@ -42,33 +41,73 @@ function readState(): SyncState | null {
 }
 
 function writeState(sha: string) {
+  mkdirSync(dirname(statePath), { recursive: true })
   const state: SyncState = { sha, syncedAt: new Date().toISOString() }
   writeFileSync(statePath, JSON.stringify(state, null, 2))
 }
 
-function remoteHeadSha(): string {
-  const out = execSync(
-    `git ls-remote "${repoUrl}" "refs/heads/${branch}"`,
-    { encoding: 'utf-8' },
-  ).trim()
-  const sha = out.split('\t')[0]
-  if (!sha) {
-    throw new Error(`Could not resolve refs/heads/${branch} for ${repoSlug}`)
-  }
-  return sha
+function authToken(): string | undefined {
+  return process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN
 }
 
-function ensureClone(sha: string) {
-  mkdirSync(resolve(ROOT, '.cache'), { recursive: true })
-  if (!existsSync(cacheDir)) {
-    execSync(`git clone --depth 1 --branch "${branch}" "${repoUrl}" "${cacheDir}"`, {
-      stdio: 'inherit',
-    })
-    return
+function authHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': USER_AGENT,
   }
-  execSync('git fetch origin', { cwd: cacheDir, stdio: 'inherit' })
-  execSync(`git checkout "${branch}"`, { cwd: cacheDir, stdio: 'inherit' })
-  execSync(`git reset --hard "${sha}"`, { cwd: cacheDir, stdio: 'inherit' })
+  const token = authToken()
+  if (token) headers.Authorization = `Bearer ${token}`
+  return headers
+}
+
+async function githubFetch(path: string): Promise<Response> {
+  const headers = authHeaders()
+
+  const res = await fetch(`${GITHUB_API}${path}`, { headers })
+  if (!res.ok) {
+    const body = await res.text()
+    throw new Error(`GitHub API ${res.status} for ${path}: ${body.slice(0, 200)}`)
+  }
+  return res
+}
+
+async function remoteHeadSha(): Promise<string> {
+  const res = await githubFetch(
+    `/repos/${owner}/${repo}/commits/${encodeURIComponent(branch)}`,
+  )
+  const data = (await res.json()) as { sha: string }
+  if (!data.sha) {
+    throw new Error(`Could not resolve branch ${branch} for ${repoSlug}`)
+  }
+  return data.sha
+}
+
+async function downloadRepoArchive(): Promise<string> {
+  rmSync(archiveDir, { recursive: true, force: true })
+  mkdirSync(archiveDir, { recursive: true })
+
+  const tarball = resolve(archiveDir, 'repo.tar.gz')
+  const token = authToken()
+  const archiveUrl = token
+    ? `${GITHUB_API}/repos/${owner}/${repo}/tarball/${encodeURIComponent(branch)}`
+    : `https://github.com/${owner}/${repo}/archive/refs/heads/${encodeURIComponent(branch)}.tar.gz`
+  const res = await fetch(archiveUrl, {
+    headers: authHeaders(),
+    redirect: 'follow',
+  })
+  if (!res.ok) {
+    throw new Error(`Failed to download ${archiveUrl}: ${res.status}`)
+  }
+
+  const buffer = Buffer.from(await res.arrayBuffer())
+  writeFileSync(tarball, buffer)
+  execSync(`tar -xzf "${tarball}" -C "${archiveDir}"`, { stdio: 'pipe' })
+
+  const extracted = readdirSync(archiveDir).filter((name) => name !== 'repo.tar.gz')
+  if (extracted.length !== 1) {
+    throw new Error(`Expected one extracted folder in ${archiveDir}`)
+  }
+  return resolve(archiveDir, extracted[0]!)
 }
 
 function collectMdFiles(repoRoot: string): string[] {
@@ -145,9 +184,9 @@ function syncFromRepo(repoRoot: string) {
   console.log(`Synced ${mdFiles.length} notes from ${repoSlug}@${branch}.`)
 }
 
-function main() {
+async function runSync() {
   const force = process.argv.includes('--force')
-  const headSha = remoteHeadSha()
+  const headSha = await remoteHeadSha()
   const state = readState()
 
   if (
@@ -168,9 +207,24 @@ function main() {
       : `Fetching ${repoSlug}@${branch} (${headSha.slice(0, 7)})`,
   )
 
-  ensureClone(headSha)
-  syncFromRepo(cacheDir)
+  const repoRoot = await downloadRepoArchive()
+  syncFromRepo(repoRoot)
   writeState(headSha)
+}
+
+async function main() {
+  try {
+    await runSync()
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    if (existsSync(manifestPath)) {
+      console.warn(`GitHub sync skipped: ${message}`)
+      console.warn('Using committed dev-logs-manifest.json and assets.')
+      return
+    }
+    console.error(message)
+    process.exit(1)
+  }
 }
 
 main()

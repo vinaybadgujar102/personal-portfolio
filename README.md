@@ -47,6 +47,12 @@ Output: `dist/client` (static files for GitHub Pages).
 
 CI runs `npm run content` during build, so the latest `dev_logs` commit is pulled even without a local vault.
 
+### Vercel
+
+1. Import the repo in Vercel (output directory is set in `vercel.json` as `dist/client`).
+2. If [dev_logs](https://github.com/vinaybadgujar102/dev_logs) is **private**, add a **`GITHUB_TOKEN`** environment variable in Vercel (fine-grained or classic PAT with read access to that repo). Without it, the build still succeeds using the committed manifest and assets in this repo.
+3. Redeploy after env changes.
+
 ### GitHub Pages
 
 1. Push to GitHub.
