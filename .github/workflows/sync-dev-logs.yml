@@ -1,0 +1,38 @@
+name: Sync dev logs from GitHub
+
+on:
+  schedule:
+    # Check for new commits on dev_logs daily (UTC noon)
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [dev-logs-updated]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run content
+
+      - name: Commit updated manifest and assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/generated/dev-logs-manifest.json public/assets/ content/asset-map.json
+          if git diff --staged --quiet; then
+            echo "No content changes from dev_logs."
+            exit 0
+          fi
+          git commit -m "chore: sync dev logs from vinaybadgujar102/dev_logs"
+          git push
