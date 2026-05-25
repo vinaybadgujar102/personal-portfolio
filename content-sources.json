@@ -1,0 +1,16 @@
+{
+  "source": "github",
+  "github": {
+    "owner": "vinaybadgujar102",
+    "repo": "dev_logs",
+    "branch": "master"
+  },
+  "section": "dev-logs",
+  "include": ["Perps/**/*.md", "**/*.md"],
+  "exclude": [
+    "**/.obsidian/**",
+    "**/private/**",
+    "README.md",
+    ".scripts/**"
+  ]
+}
